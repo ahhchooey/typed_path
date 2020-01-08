@@ -1,0 +1,7 @@
+{
+  "name": "typed_path",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Alex Chui <ahhchui@gmail.com>",
+  "license": "MIT"
+}
