@@ -2,7 +2,7 @@ module.exports = {
   mode: "production",
   devtool: "source-map",
   resolve: {
-    extenstions: [
+    extensions: [
       ".ts",
       ".tsx"
     ]
@@ -13,7 +13,9 @@ module.exports = {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
         use: [
-          loader: "ts-loader"
+          {
+            loader: "ts-loader"
+          }
         ]
       },
       {
