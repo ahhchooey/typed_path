@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import {Hello} from "./components/Hello.tsx";
+import {Pathfinder} from "./components/Pathfinder.tsx";
 
 ReactDOM.render(
-  <Hello compiler="TypeScript" framework="React"></Hello>,
+  <Pathfinder/>,
   document.getElementById("root")
 );

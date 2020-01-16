@@ -86,10 +86,75 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/components/Hello.tsx":
-/*!**********************************!*\
-  !*** ./src/components/Hello.tsx ***!
-  \**********************************/
+/***/ "./src/components sync recursive":
+/*!*****************************!*\
+  !*** ./src/components sync ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function webpackEmptyContext(req) {
+	var e = new Error("Cannot find module '" + req + "'");
+	e.code = 'MODULE_NOT_FOUND';
+	throw e;
+}
+webpackEmptyContext.keys = function() { return []; };
+webpackEmptyContext.resolve = webpackEmptyContext;
+module.exports = webpackEmptyContext;
+webpackEmptyContext.id = "./src/components sync recursive";
+
+/***/ }),
+
+/***/ "./src/components/Node.tsx":
+/*!*********************************!*\
+  !*** ./src/components/Node.tsx ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__("./src/components sync recursive")();
+from;
+"react";
+__webpack_require__(/*! ./stylesheets/Node.css */ "./src/components/stylesheets/Node.css");
+function Node(props) {
+    const [row, setRow] = useState(props.row);
+    const [col, setCol] = useState(props.col);
+    const [isStart, setIsStart] = useState(false);
+    const [isEnd, setIsEnd] = useState(false);
+    const [distance, setDistance] = useState(Infinity);
+    const [isVisted, setIsVisited] = useState(false);
+    const [isPath, setIsPath] = useState(false);
+    let className = "node";
+    if (isStart) {
+        className += " node-start";
+    }
+    ;
+    if (isEnd) {
+        className += " node-end";
+    }
+    ;
+    if (isVisted) {
+        className += " node-visited";
+    }
+    ;
+    if (isPath) {
+        className += " node-path";
+    }
+    ;
+    return (React.createElement("div", { className: className }));
+}
+exports.Node = Node;
+
+
+/***/ }),
+
+/***/ "./src/components/Pathfinder.tsx":
+/*!***************************************!*\
+  !*** ./src/components/Pathfinder.tsx ***!
+  \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -97,14 +162,60 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "react");
-exports.Hello = (props) => {
-    return (React.createElement("h1", null,
-        "Hello from ",
-        props.compiler,
-        " and ",
-        props.framework,
-        "!"));
-};
+const react_1 = __webpack_require__(/*! react */ "react");
+__webpack_require__(/*! ./stylesheets/Pathfinder.css */ "./src/components/stylesheets/Pathfinder.css");
+const Node_tsx_1 = __webpack_require__(/*! ./Node.tsx */ "./src/components/Node.tsx");
+function Pathfinder() {
+    const dummyNode = new Node_tsx_1.Node();
+    const [nodes, setNodes] = react_1.useState([]);
+    const [startNode, setStartNode] = react_1.useState(dummyNode);
+    const [endNode, setEndNode] = react_1.useState(dummyNode);
+    const createNodes = () => {
+        const nodes = [];
+        for (let row = 0; row < 21; row++) {
+            const currentRow = [];
+            for (let col = 0; col < 50; col++) {
+                const currentNode = {
+                    row,
+                    col,
+                    isStart: (row === 10 && col === 9) ? true : false,
+                    isEnd: (row === 10 && col === 40) ? true : false
+                };
+                if (currentNode.isStart)
+                    setStartNode(currentNode);
+                if (currentNode.isEnd)
+                    setEndNode(currentNode);
+                currentRow.push(currentNode);
+            }
+            nodes.push(currentRow);
+        }
+        setNodes(nodes);
+    };
+    return (React.createElement("div", { className: "pathfinder" }));
+}
+exports.Pathfinder = Pathfinder;
+
+
+/***/ }),
+
+/***/ "./src/components/stylesheets/Node.css":
+/*!*********************************************!*\
+  !*** ./src/components/stylesheets/Node.css ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
+/***/ "./src/components/stylesheets/Pathfinder.css":
+/*!***************************************************!*\
+  !*** ./src/components/stylesheets/Pathfinder.css ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
 
 
 /***/ }),
@@ -121,8 +232,8 @@ exports.Hello = (props) => {
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "react");
 const ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
-const Hello_tsx_1 = __webpack_require__(/*! ./components/Hello.tsx */ "./src/components/Hello.tsx");
-ReactDOM.render(React.createElement(Hello_tsx_1.Hello, { compiler: "TypeScript", framework: "React" }), document.getElementById("root"));
+const Pathfinder_tsx_1 = __webpack_require__(/*! ./components/Pathfinder.tsx */ "./src/components/Pathfinder.tsx");
+ReactDOM.render(React.createElement(Pathfinder_tsx_1.Pathfinder, null), document.getElementById("root"));
 
 
 /***/ }),
