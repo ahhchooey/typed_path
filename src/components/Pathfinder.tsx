@@ -6,6 +6,13 @@ import Topbar from "./Topbar.tsx";
 
 
 export function Pathfinder() {
+  const dummyNode = new Node();
 
+  const [nodes, setNodes] = useState([]);
+  const [startNode, setStartNode] = useState(dummyNode);
+  const [endNode, setEndNode] = useState(dummyNode);
 
+  return (
+
+  )
 }
