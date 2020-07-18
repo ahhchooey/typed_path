@@ -86,25 +86,6 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/components sync recursive":
-/*!*****************************!*\
-  !*** ./src/components sync ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-function webpackEmptyContext(req) {
-	var e = new Error("Cannot find module '" + req + "'");
-	e.code = 'MODULE_NOT_FOUND';
-	throw e;
-}
-webpackEmptyContext.keys = function() { return []; };
-webpackEmptyContext.resolve = webpackEmptyContext;
-module.exports = webpackEmptyContext;
-webpackEmptyContext.id = "./src/components sync recursive";
-
-/***/ }),
-
 /***/ "./src/components/Node.tsx":
 /*!*********************************!*\
   !*** ./src/components/Node.tsx ***!
@@ -115,18 +96,17 @@ webpackEmptyContext.id = "./src/components sync recursive";
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__("./src/components sync recursive")();
-from;
-"react";
+const React = __webpack_require__(/*! react */ "react");
+const react_1 = __webpack_require__(/*! react */ "react");
 __webpack_require__(/*! ./stylesheets/Node.css */ "./src/components/stylesheets/Node.css");
 function Node(props) {
-    const [row, setRow] = useState(props.row);
-    const [col, setCol] = useState(props.col);
-    const [isStart, setIsStart] = useState(false);
-    const [isEnd, setIsEnd] = useState(false);
-    const [distance, setDistance] = useState(Infinity);
-    const [isVisted, setIsVisited] = useState(false);
-    const [isPath, setIsPath] = useState(false);
+    const [row, setRow] = react_1.useState(props.row);
+    const [col, setCol] = react_1.useState(props.col);
+    const [isStart, setIsStart] = react_1.useState(false);
+    const [isEnd, setIsEnd] = react_1.useState(false);
+    const [distance, setDistance] = react_1.useState(Infinity);
+    const [isVisted, setIsVisited] = react_1.useState(false);
+    const [isPath, setIsPath] = react_1.useState(false);
     let className = "node";
     if (isStart) {
         className += " node-start";
@@ -166,7 +146,7 @@ const react_1 = __webpack_require__(/*! react */ "react");
 __webpack_require__(/*! ./stylesheets/Pathfinder.css */ "./src/components/stylesheets/Pathfinder.css");
 const Node_tsx_1 = __webpack_require__(/*! ./Node.tsx */ "./src/components/Node.tsx");
 function Pathfinder() {
-    const dummyNode = new Node_tsx_1.Node();
+    const dummyNode = new Node_tsx_1.Node({});
     const [nodes, setNodes] = react_1.useState([]);
     const [startNode, setStartNode] = react_1.useState(dummyNode);
     const [endNode, setEndNode] = react_1.useState(dummyNode);

@@ -1,4 +1,5 @@
-import * as React, {useState} from "react";
+import * as React from "react";
+import {useState} from "react";
 import "./stylesheets/Node.css";
 
 
@@ -25,5 +26,4 @@ export function Node(props) {
     >
     </div>
   )
-
 }
