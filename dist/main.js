@@ -102,10 +102,10 @@ class Node extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            row: props.row,
-            col: props.col,
-            isStart: props.isStart,
-            isEnd: props.isEnd,
+            row: props.node.row,
+            col: props.node.col,
+            isStart: props.node.isStart,
+            isEnd: props.node.isEnd,
             distance: Infinity,
             isVisited: false,
             isPath: false,
@@ -188,7 +188,7 @@ class Pathfinder extends React.Component {
     render() {
         return (React.createElement("div", { className: "pathfinder" }, this.state.nodes.map((row) => {
             return row.map((node) => {
-                return React.createElement(Node_tsx_1.default, { node: node });
+                return React.createElement(Node_tsx_1.default, { node: node, key: `${node.row},${node.col}` });
             });
         })));
     }

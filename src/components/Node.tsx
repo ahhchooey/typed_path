@@ -4,10 +4,12 @@ import "./stylesheets/Node.css";
 
 
 type NodeProps = {
-  row: number,
-  col: number,
-  isStart: boolean,
-  isEnd: boolean,
+  node: {
+    row: number,
+    col: number,
+    isStart: boolean,
+    isEnd: boolean,
+  },
 };
 
 type NodeState = {
@@ -26,10 +28,10 @@ export default class Node extends React.Component<NodeProps, NodeState> {
   constructor(props: NodeProps) {
     super(props);
     this.state = {
-      row: props.row,
-      col: props.col,
-      isStart: props.isStart,
-      isEnd: props.isEnd,
+      row: props.node.row,
+      col: props.node.col,
+      isStart: props.node.isStart,
+      isEnd: props.node.isEnd,
       distance: Infinity,
       isVisited: false,
       isPath: false,
