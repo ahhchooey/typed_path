@@ -102,8 +102,8 @@ __webpack_require__(/*! ./stylesheets/Node.css */ "./src/components/stylesheets/
 function Node(props) {
     const [row, setRow] = react_1.useState(props.row);
     const [col, setCol] = react_1.useState(props.col);
-    const [isStart, setIsStart] = react_1.useState(false);
-    const [isEnd, setIsEnd] = react_1.useState(false);
+    const [isStart, setIsStart] = react_1.useState(props.isStart);
+    const [isEnd, setIsEnd] = react_1.useState(props.isEnd);
     const [distance, setDistance] = react_1.useState(Infinity);
     const [isVisted, setIsVisited] = react_1.useState(false);
     const [isPath, setIsPath] = react_1.useState(false);
@@ -152,6 +152,8 @@ function Pathfinder() {
     const [endNode, setEndNode] = react_1.useState(dummyNode);
     const createNodes = () => {
         const nodes = [];
+        let startNode;
+        let endNode;
         for (let row = 0; row < 21; row++) {
             const currentRow = [];
             for (let col = 0; col < 50; col++) {
@@ -171,7 +173,15 @@ function Pathfinder() {
         }
         setNodes(nodes);
     };
-    return (React.createElement("div", { className: "pathfinder" }));
+    react_1.useEffect(() => {
+        createNodes();
+    }, []);
+    return (React.createElement("div", { className: "pathfinder" }, nodes.map((row) => {
+        return row.map((node) => {
+            console.log(node);
+            return React.createElement(Node_tsx_1.Node, { node: node, key: `${node.row},${node.col}` });
+        });
+    })));
 }
 exports.Pathfinder = Pathfinder;
 

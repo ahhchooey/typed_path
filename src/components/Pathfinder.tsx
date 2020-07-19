@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import "./stylesheets/Pathfinder.css";
 
 import {Node} from "./Node.tsx";
@@ -15,6 +15,8 @@ export function Pathfinder() {
 
   const createNodes = () => {
     const nodes = [];
+    let startNode;
+    let endNode;
 
     for (let row = 0; row < 21; row++) {
       const currentRow = [];
@@ -35,8 +37,18 @@ export function Pathfinder() {
     setNodes(nodes);
   }
 
+  useEffect(() => {
+    createNodes();
+  }, []);
+
   return (
     <div className="pathfinder">
+      {nodes.map((row) => {
+        return row.map((node) => {
+          console.log(node);
+          return <Node node={node} key={`${node.row},${node.col}`}/>
+        })
+      })}
     </div>
   )
 }
