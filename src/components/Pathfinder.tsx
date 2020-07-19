@@ -1,54 +1,73 @@
 import * as React from "react";
-import {useState, useEffect} from "react";
 import "./stylesheets/Pathfinder.css";
 
-import {Node} from "./Node.tsx";
+import Node from "./Node.tsx";
 import {Topbar} from "./Topbar.tsx";
 
 
-export function Pathfinder() {
-  const dummyNode = new Node({});
+type PathNode = {
+  row: number,
+  col: number, 
+  isStart: boolean,
+  isEnd: boolean,
+};
 
-  const [nodes, setNodes] = useState([]);
-  const [startNode, setStartNode] = useState(dummyNode);
-  const [endNode, setEndNode] = useState(dummyNode);
+type PathfinderState = {
+  nodes: Array<Array<PathNode>>,
+  startNode: PathNode,
+  endNode: PathNode,
+};
 
-  const createNodes = () => {
+export default class Pathfinder extends React.Component<{}, PathfinderState> {
+  dummy: PathNode;
+
+  constructor(props: {}) {
+    super(props);
+    this.dummy = {row: -1, col: -1, isStart: false, isEnd: false};
+    this.state = {
+      nodes: [[this.dummy]],
+      startNode: this.dummy,
+      endNode: this.dummy,
+    };
+  }
+
+  componentDidMount(): void {
+    this.createNodes();
+  };
+
+  createNodes(): void {
     const nodes = [];
-    let startNode;
-    let endNode;
 
     for (let row = 0; row < 21; row++) {
       const currentRow = [];
       for (let col = 0; col < 50; col++) {
-        const currentNode = {
+        const currentNode: PathNode = {
           row,
           col,
           isStart : (row === 10 && col === 9) ? true : false,
           isEnd : (row === 10 && col === 40) ? true : false
         }
-        if (currentNode.isStart) setStartNode(currentNode);
-        if (currentNode.isEnd) setEndNode(currentNode);
+        if (currentNode.isStart) this.setState({startNode: currentNode});
+        if (currentNode.isEnd) this.setState({endNode: currentNode});
         currentRow.push(currentNode)
       }
       nodes.push(currentRow);
     }
 
-    setNodes(nodes);
+    this.setState({nodes: nodes});
   }
 
-  useEffect(() => {
-    createNodes();
-  }, []);
-
-  return (
-    <div className="pathfinder">
-      {nodes.map((row) => {
-        return row.map((node) => {
-          console.log(node);
-          return <Node node={node} key={`${node.row},${node.col}`}/>
-        })
-      })}
-    </div>
-  )
-}
+  render() {
+    return (
+      <div className="pathfinder">
+        {
+          this.state.nodes.map((row) => {
+            return row.map((node) => {
+              return <Node node={node} />
+            })
+          })
+        }
+      </div>
+    )
+  }
+};

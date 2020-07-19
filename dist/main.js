@@ -97,36 +97,42 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "react");
-const react_1 = __webpack_require__(/*! react */ "react");
 __webpack_require__(/*! ./stylesheets/Node.css */ "./src/components/stylesheets/Node.css");
-function Node(props) {
-    const [row, setRow] = react_1.useState(props.row);
-    const [col, setCol] = react_1.useState(props.col);
-    const [isStart, setIsStart] = react_1.useState(props.isStart);
-    const [isEnd, setIsEnd] = react_1.useState(props.isEnd);
-    const [distance, setDistance] = react_1.useState(Infinity);
-    const [isVisted, setIsVisited] = react_1.useState(false);
-    const [isPath, setIsPath] = react_1.useState(false);
-    let className = "node";
-    if (isStart) {
-        className += " node-start";
+class Node extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            row: props.row,
+            col: props.col,
+            isStart: props.isStart,
+            isEnd: props.isEnd,
+            distance: Infinity,
+            isVisited: false,
+            isPath: false,
+        };
+        this.className = "node";
+        if (this.state.isStart) {
+            this.className += " node-start";
+        }
+        ;
+        if (this.state.isEnd) {
+            this.className += " node-end";
+        }
+        ;
+        if (this.state.isVisited) {
+            this.className += " node-visited";
+        }
+        ;
+        if (this.state.isPath) {
+            this.className += " node-path";
+        }
+        ;
     }
-    ;
-    if (isEnd) {
-        className += " node-end";
+    render() {
+        return (React.createElement("div", { className: this.className }));
     }
-    ;
-    if (isVisted) {
-        className += " node-visited";
-    }
-    ;
-    if (isPath) {
-        className += " node-path";
-    }
-    ;
-    return (React.createElement("div", { className: className }));
 }
-exports.Node = Node;
+exports.default = Node;
 
 
 /***/ }),
@@ -142,18 +148,24 @@ exports.Node = Node;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "react");
-const react_1 = __webpack_require__(/*! react */ "react");
 __webpack_require__(/*! ./stylesheets/Pathfinder.css */ "./src/components/stylesheets/Pathfinder.css");
 const Node_tsx_1 = __webpack_require__(/*! ./Node.tsx */ "./src/components/Node.tsx");
-function Pathfinder() {
-    const dummyNode = new Node_tsx_1.Node({});
-    const [nodes, setNodes] = react_1.useState([]);
-    const [startNode, setStartNode] = react_1.useState(dummyNode);
-    const [endNode, setEndNode] = react_1.useState(dummyNode);
-    const createNodes = () => {
+class Pathfinder extends React.Component {
+    constructor(props) {
+        super(props);
+        this.dummy = { row: -1, col: -1, isStart: false, isEnd: false };
+        this.state = {
+            nodes: [[this.dummy]],
+            startNode: this.dummy,
+            endNode: this.dummy,
+        };
+    }
+    componentDidMount() {
+        this.createNodes();
+    }
+    ;
+    createNodes() {
         const nodes = [];
-        let startNode;
-        let endNode;
         for (let row = 0; row < 21; row++) {
             const currentRow = [];
             for (let col = 0; col < 50; col++) {
@@ -164,26 +176,25 @@ function Pathfinder() {
                     isEnd: (row === 10 && col === 40) ? true : false
                 };
                 if (currentNode.isStart)
-                    setStartNode(currentNode);
+                    this.setState({ startNode: currentNode });
                 if (currentNode.isEnd)
-                    setEndNode(currentNode);
+                    this.setState({ endNode: currentNode });
                 currentRow.push(currentNode);
             }
             nodes.push(currentRow);
         }
-        setNodes(nodes);
-    };
-    react_1.useEffect(() => {
-        createNodes();
-    }, []);
-    return (React.createElement("div", { className: "pathfinder" }, nodes.map((row) => {
-        return row.map((node) => {
-            console.log(node);
-            return React.createElement(Node_tsx_1.Node, { node: node, key: `${node.row},${node.col}` });
-        });
-    })));
+        this.setState({ nodes: nodes });
+    }
+    render() {
+        return (React.createElement("div", { className: "pathfinder" }, this.state.nodes.map((row) => {
+            return row.map((node) => {
+                return React.createElement(Node_tsx_1.default, { node: node });
+            });
+        })));
+    }
 }
-exports.Pathfinder = Pathfinder;
+exports.default = Pathfinder;
+;
 
 
 /***/ }),
@@ -223,7 +234,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "react");
 const ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
 const Pathfinder_tsx_1 = __webpack_require__(/*! ./components/Pathfinder.tsx */ "./src/components/Pathfinder.tsx");
-ReactDOM.render(React.createElement(Pathfinder_tsx_1.Pathfinder, null), document.getElementById("root"));
+ReactDOM.render(React.createElement(Pathfinder_tsx_1.default, null), document.getElementById("root"));
 
 
 /***/ }),

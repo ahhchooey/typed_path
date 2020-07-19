@@ -3,34 +3,48 @@ import {useState} from "react";
 import "./stylesheets/Node.css";
 
 
-type NodeProps= {
+type NodeProps = {
   row: number,
   col: number,
   isStart: boolean,
-  isEnd: boolean
-}
+  isEnd: boolean,
+};
 
-export function Node(props: NodeProps) {
+type NodeState = {
+  row: number, 
+  col: number,
+  isStart: boolean,
+  isEnd: boolean,
+  distance: number,
+  isVisited: boolean,
+  isPath: boolean,
+};
 
-  const [row, setRow] = useState(props.row);
-  const [col, setCol] = useState(props.col);
-  const [isStart, setIsStart] = useState(props.isStart);
-  const [isEnd, setIsEnd] = useState(props.isEnd);
+export default class Node extends React.Component<NodeProps, NodeState> {
+  className: string;
 
-  const [distance, setDistance] = useState(Infinity);
-  const [isVisted, setIsVisited] = useState(false);
-  const [isPath, setIsPath] = useState(false);
+  constructor(props: NodeProps) {
+    super(props);
+    this.state = {
+      row: props.row,
+      col: props.col,
+      isStart: props.isStart,
+      isEnd: props.isEnd,
+      distance: Infinity,
+      isVisited: false,
+      isPath: false,
+    }
+    this.className = "node";
+    if (this.state.isStart) {this.className += " node-start"};
+    if (this.state.isEnd) {this.className += " node-end"};
+    if (this.state.isVisited) {this.className += " node-visited"};
+    if (this.state.isPath) {this.className += " node-path"};
+  }
 
-  let className: string = "node";
-  if (isStart) {className += " node-start"};
-  if (isEnd) {className += " node-end"};
-  if (isVisted) {className += " node-visited"};
-  if (isPath) {className += " node-path"};
-
-  return (
-    <div
-      className={className}
-    >
-    </div>
-  )
+  render() {
+    return (
+      <div className={this.className}>
+      </div>
+    )
+  }
 }
