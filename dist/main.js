@@ -97,7 +97,7 @@
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n\n.node-container {\n  position: relative;\n  width: 90%;\n  height: 70%;\n\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n}\n\n.node {\n  width: 2%;\n  padding-top: 2%;\n  border: 1px solid black;\n}\n\n.node-start {\n  background-color: green;\n}\n\n.node-end {\n  background-color: red;\n}\n\n.node-visited {\n  background-color: yellow;\n}\n\n.node-path {\n  background-color: blue;\n}\n", ""]);
+exports.push([module.i, "\n\n.node-container {\n  position: relative;\n  width: 90%;\n  height: 70%;\n\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n}\n\n.node {\n  width: 1.8%;\n  height: 4%;\n  margin: 1px;\n\n  border: 1px solid black;\n}\n\n.node-start {\n  background-color: green;\n}\n\n.node-end {\n  background-color: red;\n}\n\n.node-visited {\n  background-color: yellow;\n}\n\n.node-path {\n  background-color: blue;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -115,7 +115,25 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n* {\n  box-sizing: border-box; \n  margin: 0;\n  padding: 0;\n}\n\n.pathfinder {\n  position: relative;\n  width: 100vw;\n  height: 100vh;\n\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n", ""]);
+exports.push([module.i, "\n* {\n  box-sizing: border-box; \n  margin: 0;\n  padding: 0;\n}\n\n.pathfinder {\n  position: relative;\n  width: 100vw;\n  height: 50vw;\n  border: 1px solid green;\n\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n}\n", ""]);
+// Exports
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/components/stylesheets/Topbar.css":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/components/stylesheets/Topbar.css ***!
+  \*************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, "\n.topbar {\n  position: absolute;\n  border: 1px solid red;\n  width: 100%;\n  height: 10%;\n  top: 0;\n\n  display: flex;\n  justify-content: space-around;\n  align-items: center;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -571,6 +589,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "react");
 __webpack_require__(/*! ./stylesheets/Pathfinder.css */ "./src/components/stylesheets/Pathfinder.css");
 const Node_tsx_1 = __webpack_require__(/*! ./Node.tsx */ "./src/components/Node.tsx");
+const Topbar_tsx_1 = __webpack_require__(/*! ./Topbar.tsx */ "./src/components/Topbar.tsx");
 class Pathfinder extends React.Component {
     constructor(props) {
         super(props);
@@ -608,6 +627,7 @@ class Pathfinder extends React.Component {
     }
     render() {
         return (React.createElement("div", { className: "pathfinder" },
+            React.createElement(Topbar_tsx_1.default, null),
             React.createElement("div", { className: "node-container" }, this.state.nodes.map((row) => {
                 return row.map((node) => {
                     return React.createElement(Node_tsx_1.default, { node: node, key: `${node.row},${node.col}` });
@@ -617,6 +637,34 @@ class Pathfinder extends React.Component {
 }
 exports.default = Pathfinder;
 ;
+
+
+/***/ }),
+
+/***/ "./src/components/Topbar.tsx":
+/*!***********************************!*\
+  !*** ./src/components/Topbar.tsx ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(/*! react */ "react");
+__webpack_require__(/*! ./stylesheets/Topbar.css */ "./src/components/stylesheets/Topbar.css");
+class Topbar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selected: "",
+        };
+    }
+    render() {
+        return (React.createElement("div", { className: "topbar" }, "i am topbar"));
+    }
+}
+exports.default = Topbar;
 
 
 /***/ }),
@@ -659,6 +707,35 @@ module.exports = content.locals || {};
 
 var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
             var content = __webpack_require__(/*! !../../../node_modules/css-loader/dist/cjs.js!./Pathfinder.css */ "./node_modules/css-loader/dist/cjs.js!./src/components/stylesheets/Pathfinder.css");
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+
+
+module.exports = content.locals || {};
+
+/***/ }),
+
+/***/ "./src/components/stylesheets/Topbar.css":
+/*!***********************************************!*\
+  !*** ./src/components/stylesheets/Topbar.css ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../../../node_modules/css-loader/dist/cjs.js!./Topbar.css */ "./node_modules/css-loader/dist/cjs.js!./src/components/stylesheets/Topbar.css");
 
             content = content.__esModule ? content.default : content;
 

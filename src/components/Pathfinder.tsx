@@ -2,7 +2,7 @@ import * as React from "react";
 import "./stylesheets/Pathfinder.css";
 
 import Node from "./Node.tsx";
-import {Topbar} from "./Topbar.tsx";
+import Topbar from "./Topbar.tsx";
 
 
 type PathNode = {
@@ -60,6 +60,7 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
   render() {
     return (
       <div className="pathfinder">
+        <Topbar />
         <div className="node-container">
           {
             this.state.nodes.map((row) => {

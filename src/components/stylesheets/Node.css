@@ -11,8 +11,10 @@
 }
 
 .node {
-  width: 2%;
-  padding-top: 2%;
+  width: 1.8%;
+  height: 4%;
+  margin: 1px;
+
   border: 1px solid black;
 }
 

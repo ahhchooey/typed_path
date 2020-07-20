@@ -1,11 +1,25 @@
 import * as React from "react";
+import "./stylesheets/Topbar.css";
 
 
-export function Topbar() {
+type TopbarState = {
+  selected: string,
+}
 
-  return (
-    <div>
-      i am topbar
-    </div>
-  )
+export default class Topbar extends React.Component<{}, TopbarState> {
+
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      selected: "",
+    }
+  }
+
+  render() {
+    return (
+      <div className="topbar">
+        i am topbar
+      </div>
+    )
+  }
 }
