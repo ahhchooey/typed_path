@@ -60,13 +60,15 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
   render() {
     return (
       <div className="pathfinder">
-        {
-          this.state.nodes.map((row) => {
-            return row.map((node) => {
-              return <Node node={node} key={`${node.row},${node.col}`} />
+        <div className="node-container">
+          {
+            this.state.nodes.map((row) => {
+              return row.map((node) => {
+                return <Node node={node} key={`${node.row},${node.col}`} />
+              })
             })
-          })
-        }
+          }
+        </div>
       </div>
     )
   }
