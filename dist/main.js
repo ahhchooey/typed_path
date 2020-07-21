@@ -97,7 +97,7 @@
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n\n.node-container {\n  position: relative;\n  width: 90%;\n  height: 70%;\n\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n}\n\n.node {\n  width: 1.8%;\n  height: 4%;\n  margin: 1px;\n\n  border: 1px solid black;\n}\n\n.node-start {\n  background-color: green;\n}\n\n.node-end {\n  background-color: red;\n}\n\n.node-visited {\n  background-color: yellow;\n}\n\n.node-path {\n  background-color: blue;\n}\n", ""]);
+exports.push([module.i, "\n\n.node-container {\n  position: relative;\n  width: 90%;\n  height: 70%;\n\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n}\n\n.node {\n  width: 1.8%;\n  height: 4%;\n  margin: 1px;\n\n  border: 1px solid black;\n}\n\n.node-start {\n  background-color: green;\n}\n\n.node-end {\n  background-color: red;\n}\n\n.node-visited {\n  background-color: yellow;\n}\n\n.node-path {\n  background-color: blue;\n}\n\n.node-block {\n  background-color: black;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -541,34 +541,52 @@ class Node extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            row: props.node.row,
-            col: props.node.col,
             isStart: props.node.isStart,
             isEnd: props.node.isEnd,
             distance: Infinity,
             isVisited: false,
             isPath: false,
+            isBlocked: props.node.isBlocked,
+            className: "",
         };
-        this.className = "node";
+        this.row = props.node.row;
+        this.col = props.node.col;
+    }
+    componentDidMount() {
+        this.determineClassName();
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+            console.log("hi");
+        }
+    }
+    determineClassName() {
+        let className = "node";
         if (this.state.isStart) {
-            this.className += " node-start";
+            className += " node-start";
         }
         ;
         if (this.state.isEnd) {
-            this.className += " node-end";
+            className += " node-end";
         }
         ;
         if (this.state.isVisited) {
-            this.className += " node-visited";
+            className += " node-visited";
         }
         ;
         if (this.state.isPath) {
-            this.className += " node-path";
+            className += " node-path";
         }
         ;
+        if (this.state.isBlocked) {
+            className += " node-block";
+        }
+        ;
+        this.setState({ className: className });
     }
     render() {
-        return (React.createElement("div", { className: this.className }));
+        console.log(this.state.className);
+        return (React.createElement("div", { className: this.state.className, "data-row": this.row, "data-col": this.col }));
     }
 }
 exports.default = Node;
@@ -593,17 +611,22 @@ const Topbar_tsx_1 = __webpack_require__(/*! ./Topbar.tsx */ "./src/components/T
 class Pathfinder extends React.Component {
     constructor(props) {
         super(props);
-        this.dummy = { row: -1, col: -1, isStart: false, isEnd: false };
+        this.dummy = { row: -1, col: -1, isStart: false, isEnd: false, isBlocked: false };
         this.state = {
             nodes: [[this.dummy]],
             startNode: this.dummy,
             endNode: this.dummy,
         };
+        this.getNodes = this.getNodes.bind(this);
+        this.changeNode = this.changeNode.bind(this);
+        this.reset = this.reset.bind(this);
     }
     componentDidMount() {
         this.createNodes();
     }
     ;
+    componentDidUpdate() {
+    }
     createNodes() {
         const nodes = [];
         for (let row = 0; row < 21; row++) {
@@ -613,7 +636,8 @@ class Pathfinder extends React.Component {
                     row,
                     col,
                     isStart: (row === 10 && col === 9) ? true : false,
-                    isEnd: (row === 10 && col === 40) ? true : false
+                    isEnd: (row === 10 && col === 40) ? true : false,
+                    isBlocked: false,
                 };
                 if (currentNode.isStart)
                     this.setState({ startNode: currentNode });
@@ -625,9 +649,53 @@ class Pathfinder extends React.Component {
         }
         this.setState({ nodes: nodes });
     }
+    getNodes() {
+        return this.state.nodes;
+    }
+    changeNode(row, col, selected) {
+        if (selected === "changeStart" && !this.state.nodes[row][col].isBlocked) {
+            let newNodes = Object.assign([], this.state.nodes);
+            if (newNodes[row][col].isEnd) {
+                newNodes[row][col].isEnd = false;
+                newNodes[this.state.endNode.row][this.state.endNode.col].isEnd = false;
+                newNodes[this.state.endNode.row][this.state.endNode.col].isStart = true;
+            }
+            newNodes[this.state.startNode.row][this.state.startNode.col].isStart = false;
+            newNodes[row][col].isStart = true;
+            this.setState({ nodes: newNodes });
+        }
+        else if (selected === "changeEnd" && !this.state.nodes[row][col].isBlocked) {
+            let newNodes = Object.assign([], this.state.nodes);
+            if (newNodes[row][col].isStart) {
+                newNodes[row][col].isStart = false;
+                newNodes[this.state.startNode.row][this.state.startNode.col].isStart = true;
+                newNodes[this.state.startNode.row][this.state.startNode.col].isEnd = false;
+            }
+            newNodes[this.state.endNode.row][this.state.endNode.col].isEnd = false;
+            newNodes[row][col].isEnd = true;
+            this.setState({ nodes: newNodes });
+        }
+        else if (selected === "toggleBlock"
+            && !this.state.nodes[row][col].isStart && !this.state.nodes[row][col].isEnd) {
+            let newNode = Object.assign({}, this.state.nodes[row][col]);
+            if (newNode.isBlocked) {
+                newNode.isBlocked = false;
+            }
+            else {
+                newNode.isBlocked = true;
+            }
+            let newNodes = [...this.state.nodes];
+            newNodes[row][col] = newNode;
+            this.setState({ nodes: newNodes });
+        }
+    }
+    reset() {
+        this.createNodes();
+    }
     render() {
+        console.log("path redner");
         return (React.createElement("div", { className: "pathfinder" },
-            React.createElement(Topbar_tsx_1.default, null),
+            React.createElement(Topbar_tsx_1.default, { startNode: this.state.startNode, endNode: this.state.endNode, getNodes: this.getNodes, changeNode: this.changeNode, reset: this.reset }),
             React.createElement("div", { className: "node-container" }, this.state.nodes.map((row) => {
                 return row.map((node) => {
                     return React.createElement(Node_tsx_1.default, { node: node, key: `${node.row},${node.col}` });
@@ -660,8 +728,33 @@ class Topbar extends React.Component {
             selected: "",
         };
     }
+    componentDidMount() {
+        this.addSelectListener();
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps !== this.props) {
+        }
+    }
+    addSelectListener() {
+        const nodes = document.querySelector(".node-container");
+        nodes.addEventListener("click", (e) => {
+            let node = e.target;
+            if (node.className === "node") {
+                let row = node.getAttribute("data-row");
+                let col = node.getAttribute("data-col");
+                this.props.changeNode(row, col, "toggleBlock");
+                console.log(this.props.getNodes()[row][col]);
+            }
+        });
+    }
     render() {
-        return (React.createElement("div", { className: "topbar" }, "i am topbar"));
+        return (React.createElement("div", { className: "topbar" },
+            React.createElement("div", null, "RUN"),
+            React.createElement("div", null, "Change Start"),
+            React.createElement("div", null, "Change End"),
+            React.createElement("div", null, "Toggle Block"),
+            React.createElement("div", null, "ALGODROPDOWN"),
+            React.createElement("div", null, "RESET")));
     }
 }
 exports.default = Topbar;
