@@ -79,34 +79,43 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
   changeNode(row: number, col: number, selected: string): void {
     if (selected === "changeStart" && !this.state.nodes[row][col].isBlocked) {
       let newNodes = Object.assign([], this.state.nodes);
-      if (newNodes[row][col].isEnd) {
-        newNodes[row][col].isEnd = false;
-        newNodes[this.state.endNode.row][this.state.endNode.col].isEnd = false;
-        newNodes[this.state.endNode.row][this.state.endNode.col].isStart = true;
-      } 
-      newNodes[this.state.startNode.row][this.state.startNode.col].isStart = false;
+      let prevStart = this.state.startNode;
+      let prevEnd = this.state.endNode;
+      if (newNodes[row][col] === prevEnd) {
+        prevStart.isEnd = true;
+        prevStart.isStart = false;
+        this.setState({endNode: prevStart});
+      } else {
+        prevStart.isStart = false;
+      }
+      newNodes[row][col].isEnd = false;
       newNodes[row][col].isStart = true;
+      this.setState({startNode: newNodes[row][col]})
       this.setState({nodes: newNodes});
     } else if (selected === "changeEnd" && !this.state.nodes[row][col].isBlocked) {
       let newNodes = Object.assign([], this.state.nodes);
-      if (newNodes[row][col].isStart) {
-        newNodes[row][col].isStart = false;
-        newNodes[this.state.startNode.row][this.state.startNode.col].isStart = true;
-        newNodes[this.state.startNode.row][this.state.startNode.col].isEnd = false;
-      } 
-      newNodes[this.state.endNode.row][this.state.endNode.col].isEnd = false;
+      let prevStart = this.state.startNode;
+      let prevEnd = this.state.endNode;
+      if (newNodes[row][col] === prevStart) {
+        prevEnd.isEnd = false;
+        prevEnd.isStart = true;
+        this.setState({startNode: prevEnd});
+      } else {
+        prevEnd.isEnd = false;
+      }
+      newNodes[row][col].isStart = false;
       newNodes[row][col].isEnd = true;
+      this.setState({endNode: newNodes[row][col]})
       this.setState({nodes: newNodes});
     } else if (selected === "toggleBlock" 
       && !this.state.nodes[row][col].isStart && !this.state.nodes[row][col].isEnd) {
-      let newNode = Object.assign({}, this.state.nodes[row][col]);
-      if (newNode.isBlocked) {
-        newNode.isBlocked = false;
+      let newNodes = Object.assign([], this.state.nodes);
+      let node = newNodes[row][col];
+      if (node.isBlocked) {
+        node.isBlocked = false;
       } else {
-        newNode.isBlocked = true;
+        node.isBlocked = true;
       }
-      let newNodes = [...this.state.nodes];
-      newNodes[row][col] = newNode;
       this.setState({nodes: newNodes});
     }
   }
