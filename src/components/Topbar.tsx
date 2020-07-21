@@ -47,11 +47,10 @@ export default class Topbar extends React.Component<TopbarProps, TopbarState> {
     const nodes = document.querySelector(".node-container");
     nodes.addEventListener("click", (e) => {
       let node = e.target as HTMLElement;
-      if (node.className === "node") {
+      if (node.className.includes("node")) {
         let row = node.getAttribute("data-row");
         let col = node.getAttribute("data-col");
         this.props.changeNode(row, col, "toggleBlock")
-
         console.log(this.props.getNodes()[row][col])
       }
     })

@@ -537,57 +537,29 @@ module.exports = function (list, options) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(/*! react */ "react");
 __webpack_require__(/*! ./stylesheets/Node.css */ "./src/components/stylesheets/Node.css");
-class Node extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isStart: props.node.isStart,
-            isEnd: props.node.isEnd,
-            distance: Infinity,
-            isVisited: false,
-            isPath: false,
-            isBlocked: props.node.isBlocked,
-            className: "",
-        };
-        this.row = props.node.row;
-        this.col = props.node.col;
+function Node(props) {
+    let className = "node";
+    if (props.node.isStart) {
+        className += " node-start";
     }
-    componentDidMount() {
-        this.determineClassName();
+    ;
+    if (props.node.isEnd) {
+        className += " node-end";
     }
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps !== this.props) {
-            console.log("hi");
-        }
+    ;
+    if (props.node.isVisited) {
+        className += " node-visited";
     }
-    determineClassName() {
-        let className = "node";
-        if (this.state.isStart) {
-            className += " node-start";
-        }
-        ;
-        if (this.state.isEnd) {
-            className += " node-end";
-        }
-        ;
-        if (this.state.isVisited) {
-            className += " node-visited";
-        }
-        ;
-        if (this.state.isPath) {
-            className += " node-path";
-        }
-        ;
-        if (this.state.isBlocked) {
-            className += " node-block";
-        }
-        ;
-        this.setState({ className: className });
+    ;
+    if (props.node.isPath) {
+        className += " node-path";
     }
-    render() {
-        console.log(this.state.className);
-        return (React.createElement("div", { className: this.state.className, "data-row": this.row, "data-col": this.col }));
+    ;
+    if (props.node.isBlocked) {
+        className += " node-block";
     }
+    ;
+    return (React.createElement("div", { className: className, "data-row": props.node.row, "data-col": props.node.col }));
 }
 exports.default = Node;
 
@@ -739,7 +711,7 @@ class Topbar extends React.Component {
         const nodes = document.querySelector(".node-container");
         nodes.addEventListener("click", (e) => {
             let node = e.target;
-            if (node.className === "node") {
+            if (node.className.includes("node")) {
                 let row = node.getAttribute("data-row");
                 let col = node.getAttribute("data-col");
                 this.props.changeNode(row, col, "toggleBlock");

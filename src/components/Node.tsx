@@ -23,50 +23,17 @@ type NodeState = {
   className: string,
 };
 
-export default class Node extends React.Component<NodeProps, NodeState> {
-  row: number;
-  col: number;
+export default function Node(props: NodeProps) {
 
-  constructor(props: NodeProps) {
-    super(props);
-    this.state = {
-      isStart: props.node.isStart,
-      isEnd: props.node.isEnd,
-      distance: Infinity,
-      isVisited: false,
-      isPath: false,
-      isBlocked: props.node.isBlocked,
-      className: "",
-    }
-    this.row = props.node.row;
-    this.col = props.node.col;
-  }
+  let className: string = "node";
+  if (props.node.isStart) {className += " node-start"};
+  if (props.node.isEnd) {className += " node-end"};
+  if (props.node.isVisited) {className += " node-visited"};
+  if (props.node.isPath) {className += " node-path"};
+  if (props.node.isBlocked) {className += " node-block"};
 
-  componentDidMount(): void {
-    this.determineClassName();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps !== this.props) {
-      console.log("hi")
-    }
-  }
-
-  determineClassName(): void {
-    let className: string = "node";
-    if (this.state.isStart) {className += " node-start"};
-    if (this.state.isEnd) {className += " node-end"};
-    if (this.state.isVisited) {className += " node-visited"};
-    if (this.state.isPath) {className += " node-path"};
-    if (this.state.isBlocked) {className += " node-block"};
-    this.setState({className: className})
-  }
-
-  render() {
-    console.log(this.state.className)
-    return (
-      <div className={this.state.className} data-row={this.row} data-col={this.col} >
-      </div>
-    )
-  }
+  return (
+    <div className={className} data-row={props.node.row} data-col={props.node.col} >
+    </div>
+  )
 }
