@@ -10,6 +10,8 @@ type NodeProps = {
     isStart: boolean,
     isEnd: boolean,
     isBlocked: boolean,
+    isVisited: boolean,
+    isPath: boolean,
   },
 };
 

@@ -133,7 +133,7 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n.topbar {\n  position: absolute;\n  border: 1px solid red;\n  width: 100%;\n  height: 10%;\n  top: 0;\n\n  display: flex;\n  justify-content: space-around;\n  align-items: center;\n}\n", ""]);
+exports.push([module.i, "\n.topbar {\n  position: absolute;\n  border: 1px solid red;\n  width: 100%;\n  height: 10%;\n  top: 0;\n\n  display: flex;\n  justify-content: space-around;\n  align-items: center;\n}\n\n.active-button {\n  border: 1px solid blue;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -583,7 +583,8 @@ const Topbar_tsx_1 = __webpack_require__(/*! ./Topbar.tsx */ "./src/components/T
 class Pathfinder extends React.Component {
     constructor(props) {
         super(props);
-        this.dummy = { row: -1, col: -1, isStart: false, isEnd: false, isBlocked: false };
+        this.dummy = { row: -1, col: -1, isStart: false, isEnd: false,
+            isBlocked: false, isVisited: false, isPath: false };
         this.state = {
             nodes: [[this.dummy]],
             startNode: this.dummy,
@@ -610,6 +611,8 @@ class Pathfinder extends React.Component {
                     isStart: (row === 10 && col === 9) ? true : false,
                     isEnd: (row === 10 && col === 40) ? true : false,
                     isBlocked: false,
+                    isVisited: false,
+                    isPath: false,
                 };
                 if (currentNode.isStart)
                     this.setState({ startNode: currentNode });
@@ -711,22 +714,50 @@ class Topbar extends React.Component {
         const nodes = document.querySelector(".node-container");
         nodes.addEventListener("click", (e) => {
             let node = e.target;
-            if (node.className.includes("node")) {
+            if (node.classList.contains("node")) {
                 let row = node.getAttribute("data-row");
                 let col = node.getAttribute("data-col");
-                this.props.changeNode(row, col, "toggleBlock");
-                console.log(this.props.getNodes()[row][col]);
+                if (this.state.selected === "changeStart") {
+                    this.props.changeNode(row, col, "changeStart");
+                }
+                else if (this.state.selected === "changeEnd") {
+                    this.props.changeNode(row, col, "changeEnd");
+                }
+                else if (this.state.selected === "toggleBlock") {
+                    this.props.changeNode(row, col, "toggleBlock");
+                }
             }
         });
     }
+    addActive(target, input) {
+        target.classList.add("active-button");
+        this.setState({ selected: input });
+    }
+    removeActive() {
+        let buttons = document.querySelectorAll(".toggle-button");
+        buttons.forEach(button => {
+            button.classList.remove("active-button");
+        });
+        this.setState({ selected: "" });
+    }
+    changeSelected(input, event) {
+        let target = event.target;
+        if (target.classList.contains("active-button")) {
+            this.removeActive();
+        }
+        else {
+            this.removeActive();
+            this.addActive(target, input);
+        }
+    }
     render() {
         return (React.createElement("div", { className: "topbar" },
-            React.createElement("div", null, "RUN"),
-            React.createElement("div", null, "Change Start"),
-            React.createElement("div", null, "Change End"),
-            React.createElement("div", null, "Toggle Block"),
-            React.createElement("div", null, "ALGODROPDOWN"),
-            React.createElement("div", null, "RESET")));
+            React.createElement("div", { className: "run-button" }, "RUN"),
+            React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("changeStart", e) }, "Change Start"),
+            React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("changeEnd", e) }, "Change End"),
+            React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("toggleBlock", e) }, "Toggle Block"),
+            React.createElement("div", { className: "algo-dropdown" }, "ALGODROPDOWN"),
+            React.createElement("div", { className: "reset-button" }, "RESET")));
     }
 }
 exports.default = Topbar;

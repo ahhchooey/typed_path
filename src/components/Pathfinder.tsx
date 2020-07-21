@@ -11,6 +11,8 @@ type PathNode = {
   isStart: boolean,
   isEnd: boolean,
   isBlocked: boolean,
+  isVisited: boolean,
+  isPath: boolean,
 };
 
 type PathfinderState = {
@@ -24,7 +26,8 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
 
   constructor(props: {}) {
     super(props);
-    this.dummy = {row: -1, col: -1, isStart: false, isEnd: false, isBlocked: false};
+    this.dummy = {row: -1, col: -1, isStart: false, isEnd: false, 
+      isBlocked: false, isVisited: false, isPath: false};
     this.state = {
       nodes: [[this.dummy]],
       startNode: this.dummy,
@@ -56,6 +59,8 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
           isStart: (row === 10 && col === 9) ? true : false,
           isEnd: (row === 10 && col === 40) ? true : false,
           isBlocked: false,
+          isVisited: false,
+          isPath: false,
         }
         if (currentNode.isStart) this.setState({startNode: currentNode});
         if (currentNode.isEnd) this.setState({endNode: currentNode});
