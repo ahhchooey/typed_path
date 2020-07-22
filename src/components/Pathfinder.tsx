@@ -4,6 +4,8 @@ import "./stylesheets/Pathfinder.css";
 import Node from "./Node.tsx";
 import Topbar from "./Topbar.tsx";
 
+import algoRunner from "./AlgoRunner.tsx";
+
 
 type PathNode = {
   row: number,
@@ -37,15 +39,13 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
     this.getNodes = this.getNodes.bind(this);
     this.changeNode = this.changeNode.bind(this);
     this.reset = this.reset.bind(this);
+    this.update = this.update.bind(this);
+    this.run = this.run.bind(this);
   }
 
   componentDidMount(): void {
     this.createNodes();
   };
-
-  componentDidUpdate(): void {
-
-  }
 
   createNodes(): void {
     const nodes = [];
@@ -122,6 +122,14 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
 
   reset(): void {
     this.createNodes();
+  }
+
+  run(algo: string): void {
+    algoRunner(this.getNodes, this.update);
+  }
+  
+  update(nodes: Array<Array<PathNode>>): void {
+    this.setState({nodes: nodes});
   }
 
   render() {

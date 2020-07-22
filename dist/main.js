@@ -525,6 +525,23 @@ module.exports = function (list, options) {
 
 /***/ }),
 
+/***/ "./src/components/AlgoRunner.tsx":
+/*!***************************************!*\
+  !*** ./src/components/AlgoRunner.tsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function algoRunner(fetchNodes, update) {
+}
+exports.default = algoRunner;
+
+
+/***/ }),
+
 /***/ "./src/components/Node.tsx":
 /*!*********************************!*\
   !*** ./src/components/Node.tsx ***!
@@ -580,6 +597,7 @@ const React = __webpack_require__(/*! react */ "react");
 __webpack_require__(/*! ./stylesheets/Pathfinder.css */ "./src/components/stylesheets/Pathfinder.css");
 const Node_tsx_1 = __webpack_require__(/*! ./Node.tsx */ "./src/components/Node.tsx");
 const Topbar_tsx_1 = __webpack_require__(/*! ./Topbar.tsx */ "./src/components/Topbar.tsx");
+const AlgoRunner_tsx_1 = __webpack_require__(/*! ./AlgoRunner.tsx */ "./src/components/AlgoRunner.tsx");
 class Pathfinder extends React.Component {
     constructor(props) {
         super(props);
@@ -593,13 +611,13 @@ class Pathfinder extends React.Component {
         this.getNodes = this.getNodes.bind(this);
         this.changeNode = this.changeNode.bind(this);
         this.reset = this.reset.bind(this);
+        this.update = this.update.bind(this);
+        this.run = this.run.bind(this);
     }
     componentDidMount() {
         this.createNodes();
     }
     ;
-    componentDidUpdate() {
-    }
     createNodes() {
         const nodes = [];
         for (let row = 0; row < 21; row++) {
@@ -677,6 +695,12 @@ class Pathfinder extends React.Component {
     }
     reset() {
         this.createNodes();
+    }
+    run(algo) {
+        AlgoRunner_tsx_1.default(this.getNodes, this.update);
+    }
+    update(nodes) {
+        this.setState({ nodes: nodes });
     }
     render() {
         console.log("path redner");
