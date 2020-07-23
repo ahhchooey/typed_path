@@ -97,7 +97,7 @@
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n\n.node-container {\n  position: relative;\n  width: 90%;\n  height: 70%;\n\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n}\n\n.node {\n  width: 1.8%;\n  height: 4%;\n  margin: 1px;\n\n  border: 1px solid black;\n}\n\n.node-start {\n  background-color: green;\n}\n\n.node-end {\n  background-color: red;\n}\n\n.node-visited {\n  background-color: yellow;\n}\n\n.node-path {\n  background-color: blue;\n}\n\n.node-block {\n  background-color: black;\n}\n", ""]);
+exports.push([module.i, "\n\n.node-container {\n  position: relative;\n  width: 90%;\n  height: 70%;\n\n  display: flex;\n  flex-direction: row;\n  flex-wrap: wrap;\n}\n\n.node {\n  width: 1.8%;\n  height: 4%;\n  margin: 1px;\n\n  border: 1px solid black;\n}\n\n.node-visited {\n  background-color: yellow;\n}\n\n.node-path {\n  background-color: blue;\n}\n\n.node-start {\n  background-color: green;\n}\n\n.node-end {\n  background-color: red;\n}\n\n.node-block {\n  background-color: black;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -525,6 +525,46 @@ module.exports = function (list, options) {
 
 /***/ }),
 
+/***/ "./src/algos/bfs.tsx":
+/*!***************************!*\
+  !*** ./src/algos/bfs.tsx ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function bfs(nodes, start, end, update) {
+    let output = [];
+    const queue = [{ node: start, path: [] }];
+    const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
+    while (queue.length > 0) {
+        let current = queue.shift();
+        console.log(current.node.row, current.node.col);
+        if (current.node === end) {
+            output = current.path;
+            break;
+        }
+        current.node.isVisited = true;
+        for (let i = 0; i < dirs.length; i++) {
+            let newRow = current.node.row + dirs[i][0];
+            let newCol = current.node.col + dirs[i][1];
+            if (newRow >= 0 && newRow < nodes.length && newCol >= 0 && newCol < nodes[0].length) {
+                if (!nodes[newRow][newCol].isVisited && !nodes[newRow][newCol].isBlocked) {
+                    queue.push({ node: nodes[newRow][newCol], path: current.path.concat(current.node) });
+                }
+            }
+        }
+        update(nodes);
+    }
+    return output;
+}
+exports.default = bfs;
+
+
+/***/ }),
+
 /***/ "./src/components/AlgoRunner.tsx":
 /*!***************************************!*\
   !*** ./src/components/AlgoRunner.tsx ***!
@@ -535,7 +575,9 @@ module.exports = function (list, options) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function algoRunner(fetchNodes, update) {
+const bfs_tsx_1 = __webpack_require__(/*! ../algos/bfs.tsx */ "./src/algos/bfs.tsx");
+function algoRunner(fetchNodes, update, getStart, getEnd) {
+    bfs_tsx_1.default(fetchNodes(), getStart(), getEnd(), update);
 }
 exports.default = algoRunner;
 
@@ -609,6 +651,8 @@ class Pathfinder extends React.Component {
             endNode: this.dummy,
         };
         this.getNodes = this.getNodes.bind(this);
+        this.getStart = this.getStart.bind(this);
+        this.getEnd = this.getEnd.bind(this);
         this.changeNode = this.changeNode.bind(this);
         this.reset = this.reset.bind(this);
         this.update = this.update.bind(this);
@@ -644,6 +688,12 @@ class Pathfinder extends React.Component {
     }
     getNodes() {
         return this.state.nodes;
+    }
+    getStart() {
+        return this.state.startNode;
+    }
+    getEnd() {
+        return this.state.endNode;
     }
     changeNode(row, col, selected) {
         if (selected === "changeStart" && !this.state.nodes[row][col].isBlocked) {
@@ -697,7 +747,7 @@ class Pathfinder extends React.Component {
         this.createNodes();
     }
     run(algo) {
-        AlgoRunner_tsx_1.default(this.getNodes, this.update);
+        AlgoRunner_tsx_1.default(this.getNodes, this.update, this.getStart, this.getEnd);
     }
     update(nodes) {
         this.setState({ nodes: nodes });
@@ -705,7 +755,7 @@ class Pathfinder extends React.Component {
     render() {
         console.log("path redner");
         return (React.createElement("div", { className: "pathfinder" },
-            React.createElement(Topbar_tsx_1.default, { startNode: this.state.startNode, endNode: this.state.endNode, getNodes: this.getNodes, changeNode: this.changeNode, reset: this.reset }),
+            React.createElement(Topbar_tsx_1.default, { startNode: this.state.startNode, endNode: this.state.endNode, getNodes: this.getNodes, changeNode: this.changeNode, reset: this.reset, run: this.run }),
             React.createElement("div", { className: "node-container" }, this.state.nodes.map((row) => {
                 return row.map((node) => {
                     return React.createElement(Node_tsx_1.default, { node: node, key: `${node.row},${node.col}` });
@@ -787,7 +837,7 @@ class Topbar extends React.Component {
     }
     render() {
         return (React.createElement("div", { className: "topbar" },
-            React.createElement("div", { className: "run-button" }, "RUN"),
+            React.createElement("div", { className: "run-button", onClick: (e) => this.props.run() }, "RUN"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("changeStart", e) }, "Change Start"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("changeEnd", e) }, "Change End"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("toggleBlock", e) }, "Toggle Block"),

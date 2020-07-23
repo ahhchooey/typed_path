@@ -18,20 +18,20 @@
   border: 1px solid black;
 }
 
-.node-start {
-  background-color: green;
-}
-
-.node-end {
-  background-color: red;
-}
-
 .node-visited {
   background-color: yellow;
 }
 
 .node-path {
   background-color: blue;
+}
+
+.node-start {
+  background-color: green;
+}
+
+.node-end {
+  background-color: red;
 }
 
 .node-block {

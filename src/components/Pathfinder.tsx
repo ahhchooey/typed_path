@@ -37,6 +37,8 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
     };
 
     this.getNodes = this.getNodes.bind(this);
+    this.getStart = this.getStart.bind(this);
+    this.getEnd = this.getEnd.bind(this);
     this.changeNode = this.changeNode.bind(this);
     this.reset = this.reset.bind(this);
     this.update = this.update.bind(this);
@@ -74,6 +76,14 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
 
   getNodes(): Array<Array<PathNode>> {
     return this.state.nodes;
+  }
+
+  getStart(): PathNode {
+    return this.state.startNode;
+  }
+
+  getEnd(): PathNode {
+    return this.state.endNode;
   }
 
   changeNode(row: number, col: number, selected: string): void {
@@ -125,7 +135,7 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
   }
 
   run(algo: string): void {
-    algoRunner(this.getNodes, this.update);
+    algoRunner(this.getNodes, this.update, this.getStart, this.getEnd);
   }
   
   update(nodes: Array<Array<PathNode>>): void {
@@ -142,6 +152,7 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
           getNodes={this.getNodes}
           changeNode={this.changeNode}
           reset={this.reset}
+          run={this.run}
         />
         <div className="node-container">
           {

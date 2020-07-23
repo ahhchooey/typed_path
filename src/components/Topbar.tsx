@@ -21,6 +21,7 @@ type TopbarProps = {
   getNodes: NodesFunctionType,
   changeNode: VoidFunctionType,
   reset: VoidFunctionType;
+  run: VoidFunctionType;
 }
 
 type TopbarState = {
@@ -89,7 +90,9 @@ export default class Topbar extends React.Component<TopbarProps, TopbarState> {
   render() {
     return (
       <div className="topbar">
-        <div className="run-button">
+        <div className="run-button"
+          onClick={(e) => this.props.run()}
+        >
           RUN
         </div>
         <div className="toggle-button"
