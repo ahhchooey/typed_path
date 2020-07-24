@@ -541,7 +541,8 @@ function bfs(nodes, start, end, update) {
     const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
     while (queue.length > 0) {
         let current = queue.shift();
-        console.log(current.node.row, current.node.col);
+        if (current.node.isVisited)
+            continue;
         if (current.node === end) {
             output = current.path;
             break;

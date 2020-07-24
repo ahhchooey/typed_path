@@ -10,6 +10,11 @@ type PathNode = {
   isPath: boolean,
 };
 
+type Coordinates = {
+  row: number,
+  col: number,
+}
+
 type QueueNode = {
   node: PathNode,
   path: Array<PathNode>,
@@ -29,7 +34,7 @@ export default function bfs
 
   while (queue.length > 0) {
     let current: QueueNode = queue.shift();
-    console.log(current.node.row, current.node.col)
+    if (current.node.isVisited) continue;
 
     if (current.node === end) {
       output = current.path;
