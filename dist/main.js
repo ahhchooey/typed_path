@@ -539,26 +539,28 @@ function bfs(nodes, start, end, update) {
     let output = [];
     const queue = [{ node: start, path: [] }];
     const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
-    while (queue.length > 0) {
+    let interval = setInterval(function () {
         let current = queue.shift();
-        if (current.node.isVisited)
-            continue;
-        if (current.node === end) {
-            output = current.path;
-            break;
-        }
-        current.node.isVisited = true;
-        for (let i = 0; i < dirs.length; i++) {
-            let newRow = current.node.row + dirs[i][0];
-            let newCol = current.node.col + dirs[i][1];
-            if (newRow >= 0 && newRow < nodes.length && newCol >= 0 && newCol < nodes[0].length) {
-                if (!nodes[newRow][newCol].isVisited && !nodes[newRow][newCol].isBlocked) {
-                    queue.push({ node: nodes[newRow][newCol], path: current.path.concat(current.node) });
+        if (!current.node.isVisited) {
+            if (current.node === end) {
+                output = current.path;
+                clearInterval(interval);
+            }
+            current.node.isVisited = true;
+            for (let i = 0; i < dirs.length; i++) {
+                let newRow = current.node.row + dirs[i][0];
+                let newCol = current.node.col + dirs[i][1];
+                if (newRow >= 0 && newRow < nodes.length && newCol >= 0 && newCol < nodes[0].length) {
+                    if (!nodes[newRow][newCol].isVisited && !nodes[newRow][newCol].isBlocked) {
+                        queue.push({ node: nodes[newRow][newCol], path: current.path.concat(current.node) });
+                    }
                 }
             }
+            update(nodes);
         }
-        update(nodes);
-    }
+        if (queue.length === 0)
+            clearInterval(interval);
+    }, 25);
     return output;
 }
 exports.default = bfs;
@@ -754,7 +756,6 @@ class Pathfinder extends React.Component {
         this.setState({ nodes: nodes });
     }
     render() {
-        console.log("path redner");
         return (React.createElement("div", { className: "pathfinder" },
             React.createElement(Topbar_tsx_1.default, { startNode: this.state.startNode, endNode: this.state.endNode, getNodes: this.getNodes, changeNode: this.changeNode, reset: this.reset, run: this.run }),
             React.createElement("div", { className: "node-container" }, this.state.nodes.map((row) => {

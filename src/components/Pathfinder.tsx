@@ -143,7 +143,6 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
   }
 
   render() {
-    console.log("path redner")
     return (
       <div className="pathfinder">
         <Topbar
