@@ -43,6 +43,7 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
     this.reset = this.reset.bind(this);
     this.update = this.update.bind(this);
     this.run = this.run.bind(this);
+    this.buildPath = this.buildPath.bind(this);
   }
 
   componentDidMount(): void {
@@ -135,11 +136,19 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
   }
 
   run(algo: string): void {
-    algoRunner(this.getNodes, this.update, this.getStart, this.getEnd);
+    algoRunner(this.getNodes, this.update, this.getStart, this.getEnd, algo, this.buildPath);
   }
   
   update(nodes: Array<Array<PathNode>>): void {
     this.setState({nodes: nodes});
+  }
+
+  buildPath(path: Array<PathNode>): void {
+    let newNodes = Object.assign([], this.state.nodes);
+    for (let i = 0; i < path.length; i++) {
+      newNodes[path[i].row][path[i].col].isPath = true;
+    }
+    this.setState({nodes: newNodes});
   }
 
   render() {

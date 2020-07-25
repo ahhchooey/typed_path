@@ -26,6 +26,7 @@ type TopbarProps = {
 
 type TopbarState = {
   selected: string,
+  algo: string,
 }
 
 export default class Topbar extends React.Component<TopbarProps, TopbarState> {
@@ -34,6 +35,7 @@ export default class Topbar extends React.Component<TopbarProps, TopbarState> {
     super(props);
     this.state = {
       selected: "",
+      algo: "",
     }
   }
 
@@ -113,7 +115,9 @@ export default class Topbar extends React.Component<TopbarProps, TopbarState> {
         <div className="algo-dropdown">
           ALGODROPDOWN
         </div>
-        <div className="reset-button">
+        <div className="reset-button"
+          onClick={() => this.props.reset()}
+        >
           RESET
         </div>
       </div>

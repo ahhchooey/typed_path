@@ -9,22 +9,21 @@ type PathNode = {
   isVisited: boolean,
   isPath: boolean,
 };
-
 type Coordinates = {
   row: number,
   col: number,
 }
-
 type QueueNode = {
   node: PathNode,
   path: Array<PathNode>,
 }
-
 type UpdateType = (nodes: Array<Array<PathNode>>) => void;
+type VoidFunction = (...args: any) => void;
 
 
 export default function bfs
-(nodes: Array<Array<PathNode>>, start: PathNode, end: PathNode, update: UpdateType)
+(nodes: Array<Array<PathNode>>, start: PathNode, end: PathNode, update: UpdateType,
+ buildPath: VoidFunction)
   : Array<PathNode>
 {
   let output: Array<PathNode> = [];
@@ -36,8 +35,8 @@ export default function bfs
     let current: QueueNode = queue.shift();
     if (!current.node.isVisited) {
       if (current.node === end) {
-        output = current.path;
         clearInterval(interval);
+        buildPath(current.path);
       }
 
       current.node.isVisited = true;
@@ -59,5 +58,6 @@ export default function bfs
     if (queue.length === 0) clearInterval(interval);
   }, 25)
 
+  console.log(output, "output");
   return output;
 }

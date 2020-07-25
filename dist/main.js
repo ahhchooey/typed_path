@@ -535,7 +535,7 @@ module.exports = function (list, options) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function bfs(nodes, start, end, update) {
+function bfs(nodes, start, end, update, buildPath) {
     let output = [];
     const queue = [{ node: start, path: [] }];
     const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
@@ -543,8 +543,8 @@ function bfs(nodes, start, end, update) {
         let current = queue.shift();
         if (!current.node.isVisited) {
             if (current.node === end) {
-                output = current.path;
                 clearInterval(interval);
+                buildPath(current.path);
             }
             current.node.isVisited = true;
             for (let i = 0; i < dirs.length; i++) {
@@ -561,6 +561,7 @@ function bfs(nodes, start, end, update) {
         if (queue.length === 0)
             clearInterval(interval);
     }, 25);
+    console.log(output, "output");
     return output;
 }
 exports.default = bfs;
@@ -579,8 +580,8 @@ exports.default = bfs;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const bfs_tsx_1 = __webpack_require__(/*! ../algos/bfs.tsx */ "./src/algos/bfs.tsx");
-function algoRunner(fetchNodes, update, getStart, getEnd) {
-    bfs_tsx_1.default(fetchNodes(), getStart(), getEnd(), update);
+function algoRunner(fetchNodes, update, getStart, getEnd, algo, buildPath) {
+    return bfs_tsx_1.default(fetchNodes(), getStart(), getEnd(), update, buildPath);
 }
 exports.default = algoRunner;
 
@@ -660,6 +661,7 @@ class Pathfinder extends React.Component {
         this.reset = this.reset.bind(this);
         this.update = this.update.bind(this);
         this.run = this.run.bind(this);
+        this.buildPath = this.buildPath.bind(this);
     }
     componentDidMount() {
         this.createNodes();
@@ -750,10 +752,17 @@ class Pathfinder extends React.Component {
         this.createNodes();
     }
     run(algo) {
-        AlgoRunner_tsx_1.default(this.getNodes, this.update, this.getStart, this.getEnd);
+        AlgoRunner_tsx_1.default(this.getNodes, this.update, this.getStart, this.getEnd, algo, this.buildPath);
     }
     update(nodes) {
         this.setState({ nodes: nodes });
+    }
+    buildPath(path) {
+        let newNodes = Object.assign([], this.state.nodes);
+        for (let i = 0; i < path.length; i++) {
+            newNodes[path[i].row][path[i].col].isPath = true;
+        }
+        this.setState({ nodes: newNodes });
     }
     render() {
         return (React.createElement("div", { className: "pathfinder" },
@@ -788,6 +797,7 @@ class Topbar extends React.Component {
         super(props);
         this.state = {
             selected: "",
+            algo: "",
         };
     }
     componentDidMount() {
@@ -844,7 +854,7 @@ class Topbar extends React.Component {
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("changeEnd", e) }, "Change End"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("toggleBlock", e) }, "Toggle Block"),
             React.createElement("div", { className: "algo-dropdown" }, "ALGODROPDOWN"),
-            React.createElement("div", { className: "reset-button" }, "RESET")));
+            React.createElement("div", { className: "reset-button", onClick: () => this.props.reset() }, "RESET")));
     }
 }
 exports.default = Topbar;
