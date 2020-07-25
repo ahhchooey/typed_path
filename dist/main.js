@@ -535,7 +535,7 @@ module.exports = function (list, options) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function bfs(nodes, start, end, update, buildPath) {
+function bfs(nodes, start, end, update, buildPath, changeIsRunning) {
     let output = [];
     const queue = [{ node: start, path: [] }];
     const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
@@ -545,6 +545,7 @@ function bfs(nodes, start, end, update, buildPath) {
             if (current.node === end) {
                 clearInterval(interval);
                 buildPath(current.path);
+                changeIsRunning(false);
             }
             current.node.isVisited = true;
             for (let i = 0; i < dirs.length; i++) {
@@ -580,8 +581,8 @@ exports.default = bfs;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const bfs_tsx_1 = __webpack_require__(/*! ../algos/bfs.tsx */ "./src/algos/bfs.tsx");
-function algoRunner(fetchNodes, update, getStart, getEnd, algo, buildPath) {
-    return bfs_tsx_1.default(fetchNodes(), getStart(), getEnd(), update, buildPath);
+function algoRunner(fetchNodes, update, getStart, getEnd, algo, buildPath, changeIsRunning) {
+    return bfs_tsx_1.default(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
 }
 exports.default = algoRunner;
 
@@ -653,6 +654,7 @@ class Pathfinder extends React.Component {
             nodes: [[this.dummy]],
             startNode: this.dummy,
             endNode: this.dummy,
+            isRunning: false,
         };
         this.getNodes = this.getNodes.bind(this);
         this.getStart = this.getStart.bind(this);
@@ -662,6 +664,7 @@ class Pathfinder extends React.Component {
         this.update = this.update.bind(this);
         this.run = this.run.bind(this);
         this.buildPath = this.buildPath.bind(this);
+        this.changeIsRunning = this.changeIsRunning.bind(this);
     }
     componentDidMount() {
         this.createNodes();
@@ -700,7 +703,15 @@ class Pathfinder extends React.Component {
     getEnd() {
         return this.state.endNode;
     }
+    checkIsRunning() {
+        return this.state.isRunning;
+    }
+    changeIsRunning(bool) {
+        this.setState({ isRunning: bool });
+    }
     changeNode(row, col, selected) {
+        if (this.state.isRunning)
+            return;
         if (selected === "changeStart" && !this.state.nodes[row][col].isBlocked) {
             let newNodes = Object.assign([], this.state.nodes);
             let prevStart = this.state.startNode;
@@ -752,7 +763,8 @@ class Pathfinder extends React.Component {
         this.createNodes();
     }
     run(algo) {
-        AlgoRunner_tsx_1.default(this.getNodes, this.update, this.getStart, this.getEnd, algo, this.buildPath);
+        this.setState({ isRunning: true });
+        AlgoRunner_tsx_1.default(this.getNodes, this.update, this.getStart, this.getEnd, algo, this.buildPath, this.changeIsRunning);
     }
     update(nodes) {
         this.setState({ nodes: nodes });

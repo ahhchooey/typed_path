@@ -18,8 +18,8 @@ type VoidFunction = (...args: any) => void;
 
 export default function algoRunner
 (fetchNodes: FetchNodesType, update: UpdateType, getStart: GetNodeType, getEnd: GetNodeType,
- algo: string, buildPath: VoidFunction)
+  algo: string, buildPath: VoidFunction, changeIsRunning: VoidFunction)
   : Array<PathNode>
 {
-  return bfs(fetchNodes(), getStart(), getEnd(), update, buildPath);
+  return bfs(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
 }

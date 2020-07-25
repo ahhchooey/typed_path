@@ -21,6 +21,7 @@ type PathfinderState = {
   nodes: Array<Array<PathNode>>,
   startNode: PathNode,
   endNode: PathNode,
+  isRunning: boolean,
 };
 
 export default class Pathfinder extends React.Component<{}, PathfinderState> {
@@ -34,6 +35,7 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
       nodes: [[this.dummy]],
       startNode: this.dummy,
       endNode: this.dummy,
+      isRunning: false,
     };
 
     this.getNodes = this.getNodes.bind(this);
@@ -44,6 +46,7 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
     this.update = this.update.bind(this);
     this.run = this.run.bind(this);
     this.buildPath = this.buildPath.bind(this);
+    this.changeIsRunning = this.changeIsRunning.bind(this);
   }
 
   componentDidMount(): void {
@@ -87,7 +90,16 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
     return this.state.endNode;
   }
 
+  checkIsRunning(): boolean {
+    return this.state.isRunning;
+  }
+
+  changeIsRunning(bool: boolean): void {
+    this.setState({isRunning: bool});
+  }
+
   changeNode(row: number, col: number, selected: string): void {
+    if (this.state.isRunning) return;
     if (selected === "changeStart" && !this.state.nodes[row][col].isBlocked) {
       let newNodes = Object.assign([], this.state.nodes);
       let prevStart = this.state.startNode;
@@ -136,7 +148,9 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
   }
 
   run(algo: string): void {
-    algoRunner(this.getNodes, this.update, this.getStart, this.getEnd, algo, this.buildPath);
+    this.setState({isRunning: true});
+    algoRunner(this.getNodes, this.update, this.getStart, this.getEnd, algo, this.buildPath,
+    this.changeIsRunning);
   }
   
   update(nodes: Array<Array<PathNode>>): void {

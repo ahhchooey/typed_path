@@ -23,7 +23,7 @@ type VoidFunction = (...args: any) => void;
 
 export default function bfs
 (nodes: Array<Array<PathNode>>, start: PathNode, end: PathNode, update: UpdateType,
- buildPath: VoidFunction)
+  buildPath: VoidFunction, changeIsRunning: VoidFunction)
   : Array<PathNode>
 {
   let output: Array<PathNode> = [];
@@ -37,6 +37,7 @@ export default function bfs
       if (current.node === end) {
         clearInterval(interval);
         buildPath(current.path);
+        changeIsRunning(false);
       }
 
       current.node.isVisited = true;
