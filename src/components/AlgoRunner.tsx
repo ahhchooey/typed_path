@@ -21,5 +21,7 @@ export default function algoRunner
   algo: string, buildPath: VoidFunction, changeIsRunning: VoidFunction)
   : Array<PathNode>
 {
-  return bfs(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
+  if (algo === "bfs") {
+    return bfs(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
+  }
 }

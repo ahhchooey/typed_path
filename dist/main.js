@@ -582,7 +582,9 @@ exports.default = bfs;
 Object.defineProperty(exports, "__esModule", { value: true });
 const bfs_tsx_1 = __webpack_require__(/*! ../algos/bfs.tsx */ "./src/algos/bfs.tsx");
 function algoRunner(fetchNodes, update, getStart, getEnd, algo, buildPath, changeIsRunning) {
-    return bfs_tsx_1.default(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
+    if (algo === "bfs") {
+        return bfs_tsx_1.default(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
+    }
 }
 exports.default = algoRunner;
 
@@ -763,6 +765,8 @@ class Pathfinder extends React.Component {
         this.createNodes();
     }
     run(algo) {
+        if (this.state.isRunning)
+            return;
         this.setState({ isRunning: true });
         AlgoRunner_tsx_1.default(this.getNodes, this.update, this.getStart, this.getEnd, algo, this.buildPath, this.changeIsRunning);
     }
@@ -861,7 +865,7 @@ class Topbar extends React.Component {
     }
     render() {
         return (React.createElement("div", { className: "topbar" },
-            React.createElement("div", { className: "run-button", onClick: (e) => this.props.run() }, "RUN"),
+            React.createElement("div", { className: "run-button", onClick: (e) => this.props.run(this.state.algo) }, "RUN"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("changeStart", e) }, "Change Start"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("changeEnd", e) }, "Change End"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("toggleBlock", e) }, "Toggle Block"),

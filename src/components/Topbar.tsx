@@ -93,7 +93,7 @@ export default class Topbar extends React.Component<TopbarProps, TopbarState> {
     return (
       <div className="topbar">
         <div className="run-button"
-          onClick={(e) => this.props.run()}
+          onClick={(e) => this.props.run(this.state.algo)}
         >
           RUN
         </div>

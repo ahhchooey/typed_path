@@ -148,6 +148,7 @@ export default class Pathfinder extends React.Component<{}, PathfinderState> {
   }
 
   run(algo: string): void {
+    if (this.state.isRunning) return;
     this.setState({isRunning: true});
     algoRunner(this.getNodes, this.update, this.getStart, this.getEnd, algo, this.buildPath,
     this.changeIsRunning);
