@@ -536,7 +536,6 @@ module.exports = function (list, options) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 function bfs(nodes, start, end, update, buildPath, changeIsRunning) {
-    let output = [];
     const queue = [{ node: start, path: [] }];
     const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
     let interval = setInterval(function () {
@@ -562,10 +561,44 @@ function bfs(nodes, start, end, update, buildPath, changeIsRunning) {
         if (queue.length === 0)
             clearInterval(interval);
     }, 25);
-    console.log(output, "output");
-    return output;
 }
 exports.default = bfs;
+
+
+/***/ }),
+
+/***/ "./src/algos/dfs.tsx":
+/*!***************************!*\
+  !*** ./src/algos/dfs.tsx ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function dfs(nodes, start, end, update, buildPath, changeIsRunning) {
+    const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
+    const recur = (node, path = []) => {
+        if (node === end) {
+            buildPath(path);
+            changeIsRunning(false);
+            return;
+        }
+        node.isVisited = true;
+        for (let i = 0; i < dirs.length; i++) {
+            let newRow = node.row + dirs[i][0];
+            let newCol = node.col + dirs[i][1];
+            if (newRow >= 0 && newRow < nodes.length && newCol >= 0 && newCol < nodes[0].length) {
+                if (!nodes[newRow][newCol].isVisited && !nodes[newRow][newCol].isBlocked) {
+                    recur(nodes[newRow][newCol], path.concat(node));
+                }
+            }
+        }
+    };
+    recur(start);
+}
+exports.default = dfs;
 
 
 /***/ }),
@@ -581,9 +614,17 @@ exports.default = bfs;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const bfs_tsx_1 = __webpack_require__(/*! ../algos/bfs.tsx */ "./src/algos/bfs.tsx");
+const dfs_tsx_1 = __webpack_require__(/*! ../algos/dfs.tsx */ "./src/algos/dfs.tsx");
 function algoRunner(fetchNodes, update, getStart, getEnd, algo, buildPath, changeIsRunning) {
     if (algo === "bfs") {
         return bfs_tsx_1.default(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
+    }
+    else if (algo === "dfs") {
+        return dfs_tsx_1.default(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
+    }
+    else {
+        changeIsRunning(false);
+        alert("Please Select an Algorithm");
     }
 }
 exports.default = algoRunner;
@@ -767,7 +808,7 @@ class Pathfinder extends React.Component {
     run(algo) {
         if (this.state.isRunning)
             return;
-        this.setState({ isRunning: true });
+        this.changeIsRunning(true);
         AlgoRunner_tsx_1.default(this.getNodes, this.update, this.getStart, this.getEnd, algo, this.buildPath, this.changeIsRunning);
     }
     update(nodes) {
@@ -863,13 +904,19 @@ class Topbar extends React.Component {
             this.addActive(target, input);
         }
     }
+    changeAlgo(e) {
+        this.setState({ algo: e.target.value });
+    }
     render() {
         return (React.createElement("div", { className: "topbar" },
             React.createElement("div", { className: "run-button", onClick: (e) => this.props.run(this.state.algo) }, "RUN"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("changeStart", e) }, "Change Start"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("changeEnd", e) }, "Change End"),
             React.createElement("div", { className: "toggle-button", onClick: (e) => this.changeSelected("toggleBlock", e) }, "Toggle Block"),
-            React.createElement("div", { className: "algo-dropdown" }, "ALGODROPDOWN"),
+            React.createElement("select", { className: "algo-dropdown", defaultValue: "", onChange: (e) => this.changeAlgo(e) },
+                React.createElement("option", { value: "", disabled: true }, "Select Algo"),
+                React.createElement("option", { value: "bfs" }, "bfs"),
+                React.createElement("option", { value: "dfs" }, "dfs")),
             React.createElement("div", { className: "reset-button", onClick: () => this.props.reset() }, "RESET")));
     }
 }

@@ -1,5 +1,6 @@
 
 import bfs from "../algos/bfs.tsx";
+import dfs from "../algos/dfs.tsx";
 
 type PathNode = {
   row: number,
@@ -19,9 +20,14 @@ type VoidFunction = (...args: any) => void;
 export default function algoRunner
 (fetchNodes: FetchNodesType, update: UpdateType, getStart: GetNodeType, getEnd: GetNodeType,
   algo: string, buildPath: VoidFunction, changeIsRunning: VoidFunction)
-  : Array<PathNode>
+  : void
 {
   if (algo === "bfs") {
     return bfs(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
+  } else if (algo === "dfs") {
+    return dfs(fetchNodes(), getStart(), getEnd(), update, buildPath, changeIsRunning);
+  } else {
+    changeIsRunning(false);
+    alert("Please Select an Algorithm")
   }
 }

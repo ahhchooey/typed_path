@@ -24,10 +24,8 @@ type VoidFunction = (...args: any) => void;
 export default function bfs
 (nodes: Array<Array<PathNode>>, start: PathNode, end: PathNode, update: UpdateType,
   buildPath: VoidFunction, changeIsRunning: VoidFunction)
-  : Array<PathNode>
+  : void
 {
-  let output: Array<PathNode> = [];
-
   const queue: Array<QueueNode> = [{node: start, path: []}];
   const dirs: Array<Array<number>> = [[1,0],[0,-1],[-1,0],[0,1]];
 
@@ -58,7 +56,4 @@ export default function bfs
 
     if (queue.length === 0) clearInterval(interval);
   }, 25)
-
-  console.log(output, "output");
-  return output;
 }
