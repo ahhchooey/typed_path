@@ -89,6 +89,10 @@ export default class Topbar extends React.Component<TopbarProps, TopbarState> {
     }
   }
 
+  changeAlgo(e: any): void {
+    this.setState({algo: e.target.value});
+  }
+
   render() {
     return (
       <div className="topbar">
@@ -112,9 +116,14 @@ export default class Topbar extends React.Component<TopbarProps, TopbarState> {
         >
           Toggle Block
         </div>
-        <div className="algo-dropdown">
-          ALGODROPDOWN
-        </div>
+        <select className="algo-dropdown"
+          defaultValue=""
+          onChange={(e) => this.changeAlgo(e)}
+        >
+          <option value="" disabled>Select Algo</option>
+          <option value="bfs" >bfs</option>
+          <option value="dfs">dfs</option>
+        </select>
         <div className="reset-button"
           onClick={() => this.props.reset()}
         >
