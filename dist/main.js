@@ -579,11 +579,11 @@ exports.default = bfs;
 Object.defineProperty(exports, "__esModule", { value: true });
 function dfs(nodes, start, end, update, buildPath, changeIsRunning) {
     const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
-    const recur = (node, path = []) => {
+    const recur = (node, path) => {
         if (node === end) {
             buildPath(path);
             changeIsRunning(false);
-            return;
+            return true;
         }
         node.isVisited = true;
         for (let i = 0; i < dirs.length; i++) {
@@ -591,12 +591,14 @@ function dfs(nodes, start, end, update, buildPath, changeIsRunning) {
             let newCol = node.col + dirs[i][1];
             if (newRow >= 0 && newRow < nodes.length && newCol >= 0 && newCol < nodes[0].length) {
                 if (!nodes[newRow][newCol].isVisited && !nodes[newRow][newCol].isBlocked) {
-                    recur(nodes[newRow][newCol], path.concat(node));
+                    if (recur(nodes[newRow][newCol], path.concat(node)))
+                        return true;
                 }
             }
         }
+        return false;
     };
-    recur(start);
+    recur(start, []);
 }
 exports.default = dfs;
 

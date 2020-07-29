@@ -22,11 +22,11 @@ export default function dfs
   : void
   {
     const dirs: Array<Array<number>> = [[1,0],[0,-1],[-1,0],[0,1]];
-    const recur = (node: PathNode, path: Array<PathNode> = []): void => {
+    const recur = (node: PathNode, path: Array<PathNode>): boolean => {
       if (node === end) {
         buildPath(path);
         changeIsRunning(false);
-        return;
+        return true;
       }
 
       node.isVisited = true;
@@ -38,11 +38,13 @@ export default function dfs
         
         if (newRow >= 0 && newRow < nodes.length && newCol >= 0 && newCol < nodes[0].length) {
           if (!nodes[newRow][newCol].isVisited && !nodes[newRow][newCol].isBlocked) {
-            recur(nodes[newRow][newCol], path.concat(node));
+            if (recur(nodes[newRow][newCol], path.concat(node))) return true;
           }
         }
       }
+
+      return false;
     }
 
-    recur(start);
+    recur(start, []);
   }
