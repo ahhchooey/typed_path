@@ -578,27 +578,32 @@ exports.default = bfs;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 function dfs(nodes, start, end, update, buildPath, changeIsRunning) {
+    let shortest = null;
     const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
-    const recur = (node, path) => {
+    const recur = (node, path, visited) => {
+        console.count();
         if (node === end) {
-            buildPath(path);
-            changeIsRunning(false);
-            return true;
+            if (shortest === null)
+                shortest = path;
+            if (path.length < shortest.length)
+                shortest = path;
+            return path.length;
         }
         node.isVisited = true;
+        visited.add(`${node.row},${node.col}`);
         for (let i = 0; i < dirs.length; i++) {
             let newRow = node.row + dirs[i][0];
             let newCol = node.col + dirs[i][1];
             if (newRow >= 0 && newRow < nodes.length && newCol >= 0 && newCol < nodes[0].length) {
-                if (!nodes[newRow][newCol].isVisited && !nodes[newRow][newCol].isBlocked) {
-                    if (recur(nodes[newRow][newCol], path.concat(node)))
-                        return true;
+                if (!nodes[newRow][newCol].isBlocked && !visited.has(`${newRow},${newCol}`)) {
+                    recur(nodes[newRow][newCol], path.concat(node), new Set(visited));
                 }
             }
         }
-        return false;
     };
-    recur(start, []);
+    recur(start, [], new Set());
+    buildPath(shortest);
+    changeIsRunning(false);
 }
 exports.default = dfs;
 

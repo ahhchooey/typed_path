@@ -21,30 +21,33 @@ export default function dfs
   buildPath: VoidFunction, changeIsRunning: VoidFunction)
   : void
   {
+    let shortest: Array<PathNode> = null;
     const dirs: Array<Array<number>> = [[1,0],[0,-1],[-1,0],[0,1]];
-    const recur = (node: PathNode, path: Array<PathNode>): boolean => {
+
+    const recur = (node: PathNode, path: Array<PathNode>, visited: Set<string>): number => {
+      console.count();
       if (node === end) {
-        buildPath(path);
-        changeIsRunning(false);
-        return true;
+        if (shortest === null) shortest = path;
+        if (path.length < shortest.length) shortest = path;
+        return path.length;
       }
 
       node.isVisited = true;
+      visited.add(`${node.row},${node.col}`);
 
       for (let i = 0; i < dirs.length; i++) {
         let newRow = node.row + dirs[i][0];
         let newCol = node.col + dirs[i][1];
 
-        
         if (newRow >= 0 && newRow < nodes.length && newCol >= 0 && newCol < nodes[0].length) {
-          if (!nodes[newRow][newCol].isVisited && !nodes[newRow][newCol].isBlocked) {
-            if (recur(nodes[newRow][newCol], path.concat(node))) return true;
+          if (!nodes[newRow][newCol].isBlocked && !visited.has(`${newRow},${newCol}`)) {
+            recur(nodes[newRow][newCol], path.concat(node), new Set(visited));
           }
         }
       }
-
-      return false;
     }
 
-    recur(start, []);
+    recur(start, [], new Set());
+    buildPath(shortest);
+    changeIsRunning(false);
   }
