@@ -23,9 +23,9 @@ export default function dfs
   {
     let shortest: Array<PathNode> = null;
     const dirs: Array<Array<number>> = [[1,0],[0,-1],[-1,0],[0,1]];
+    const stack = [];
 
     const recur = (node: PathNode, path: Array<PathNode>, visited: Set<string>): number => {
-      console.count();
       if (node === end) {
         if (shortest === null) shortest = path;
         if (path.length < shortest.length) shortest = path;

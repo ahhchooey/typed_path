@@ -580,8 +580,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function dfs(nodes, start, end, update, buildPath, changeIsRunning) {
     let shortest = null;
     const dirs = [[1, 0], [0, -1], [-1, 0], [0, 1]];
+    const stack = [];
     const recur = (node, path, visited) => {
-        console.count();
         if (node === end) {
             if (shortest === null)
                 shortest = path;
