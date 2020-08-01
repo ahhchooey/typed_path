@@ -601,7 +601,9 @@ function dfs(nodes, start, end, update, buildPath, changeIsRunning) {
             }
         }
     };
-    recur(start, [], new Set());
+    let interval = setInterval(function () {
+    }, 25);
+    //recur(start, [], new Set());
     buildPath(shortest);
     changeIsRunning(false);
 }
