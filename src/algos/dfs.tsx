@@ -48,7 +48,25 @@ export default function dfs
     }
 
     let interval = setInterval(function() {
+      let current = queue.pop();
+      if (!current.node.isVisited) {
+        if (current.node === end) {
+          if (path.length < shortest.length) shortest = path;
+        }
 
+        for (let i = 0; i < dirs.length; i++) {
+          let newRow = current.node.row + dirs[i][0];
+          let newCol = current.node.col + dirs[i][1];
+
+
+          if (newRow >= 0 && newRow < nodes.length && newCol >= 0 && newCol < nodes[0].length) {
+            if (!nodes[newRow][newCol].isBlocked && !visited.has(`${newRow},${newCol}`)) {
+              recur(nodes[newRow][newCol], path.concat(node), new Set(visited));
+            }
+          }
+
+        }
+      }
     }, 25)
 
     //recur(start, [], new Set());
