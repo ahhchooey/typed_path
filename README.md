@@ -29,7 +29,7 @@ Simply select an algorithm, move the start/end as you please, put blockers if yo
 
 ------
 
-* Pabbot is built with vanilla Javascript in order to have a full package that doesn't rely on external dependencies.
+* Typed pathfinder is a project that is based on react state. It uses componenent state in order to create animations, based on a grid of stateful nodes.
 
 ------
 
