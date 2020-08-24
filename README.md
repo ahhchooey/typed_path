@@ -16,6 +16,8 @@ This is a Pathfinding visualizer. As someone that has always appreciated visual 
 ![Screenshot of BFS](./assets/bfs.gif)
 Demo of BFS visualization.
 
+------
+
 ### How to Use
 
 ------
