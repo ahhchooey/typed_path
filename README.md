@@ -13,13 +13,14 @@ This is a Pathfinding visualizer. As someone that has always appreciated visual 
 
 ------
 
-![Screenshot of BFS]()
-Desc.
+![Screenshot of BFS](./assets/bfs.gif)
+Demo of BFS visualization.
 
 ### How to Use
 
 ------
 
+Simply select an algorithm, move the start/end as you please, put blockers if you want, and click RUN.
 
 
 ### How it Works
